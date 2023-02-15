@@ -32,6 +32,7 @@ public static class ApiConfiguration
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddTransient<ExceptionHandlingMiddleware>();
     }
     public static void SetMiddleware(WebApplication app)
     {
@@ -41,6 +42,7 @@ public static class ApiConfiguration
             app.UseSwaggerUI();
         }
 
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
