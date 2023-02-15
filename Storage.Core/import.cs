@@ -4,3 +4,6 @@ global using Storage.Core.Models;
 global using Storage.Core.EF.ModelConfigurations;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.Migrations;
+global using System.Linq.Expressions;
+global using Storage.Core.EF;
+global using Storage.Core.Interfaces;

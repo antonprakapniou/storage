@@ -33,6 +33,11 @@ public static class ApiConfiguration
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddTransient<ExceptionHandlingMiddleware>();
+        services.AddAutoMapper(typeof(ApiMapProfile));
+        services.AddScoped<IValidator<AuthorDto>, AuthorDtoValid>();
+        services.AddScoped<IValidator<TopicDto>, TopicDtoValid>();
+        services.AddScoped<IValidator<BookDto>, BookDtoValid>();
+        services.AddScoped(typeof(IApiRepository<>),typeof(ApiRepository<>));
     }
     public static void SetMiddleware(WebApplication app)
     {

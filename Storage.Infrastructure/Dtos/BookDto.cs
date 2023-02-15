@@ -1,6 +1,6 @@
-﻿namespace Storage.Core.Models;
+﻿namespace Storage.Infrastructure.Dtos;
 
-public sealed class Book:BaseModel
+public sealed class BookDto:BaseDto
 {
     public string? Name { get; set; }
 
@@ -13,8 +13,8 @@ public sealed class Book:BaseModel
 
     #region Included properties
 
-    public Author? Author { get; set; }
-    public Topic? Topic { get; set; }
+    public AuthorDto? Author { get; set; }
+    public TopicDto? Topic { get; set; }
 
     #endregion
 }
