@@ -38,6 +38,8 @@ public static class ApiConfiguration
         services.AddScoped<IValidator<TopicDto>, TopicDtoValid>();
         services.AddScoped<IValidator<BookDto>, BookDtoValid>();
         services.AddScoped(typeof(IApiRepository<>),typeof(ApiRepository<>));
+        services.AddScoped(typeof(IApiService<,>),typeof(ApiService<,>));
+        services.AddScoped<IApiService<Book,BookDto>,BookService>();
     }
     public static void SetMiddleware(WebApplication app)
     {

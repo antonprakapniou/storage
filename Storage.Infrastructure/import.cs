@@ -6,3 +6,4 @@ global using Storage.Core.Models;
 global using Storage.Core.Interfaces;
 global using Storage.Infrastructure.Interfaces;
 global using Storage.Infrastructure.Exceptions;
+global using Microsoft.Extensions.Logging;

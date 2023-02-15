@@ -11,3 +11,6 @@ global using Storage.Infrastructure.Utilities;
 global using Storage.Infrastructure.Validation;
 global using Storage.Core.Interfaces;
 global using Storage.Core.Repositories;
+global using Storage.Infrastructure.Interfaces;
+global using Storage.Infrastructure.Services;
+global using Storage.Core.Models;
