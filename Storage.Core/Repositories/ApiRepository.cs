@@ -22,20 +22,23 @@
             IQueryable<T> query = _t;
             return await query.FirstAsync(expression);
         }
-        public async Task CreateAsync(T model)
+        public async Task<T> CreateAsync(T model)
         {
-            _t.Add(model);
+            var result=_t.Add(model);
             await _db.SaveChangesAsync();
+            return result.Entity;
         }
-        public async Task UpdateAsync(T model)
+        public async Task<T> UpdateAsync(T model)
         {
-            _t.Update(model);
+            var result= _t.Update(model);
             await _db.SaveChangesAsync();
+            return result.Entity;
         }
-        public async Task DeleteAsync(T model)
+        public async Task<bool> DeleteAsync(T model)
         {
-            _t.Remove(model);
+            var result = (_t.Remove(model) is null)?false:true;
             await _db.SaveChangesAsync();
+            return result;
         }
         public string GetModelType()=> _t.GetType().Name;
     }

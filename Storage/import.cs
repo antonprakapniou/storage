@@ -14,3 +14,8 @@ global using Storage.Core.Repositories;
 global using Storage.Infrastructure.Interfaces;
 global using Storage.Infrastructure.Services;
 global using Storage.Core.Models;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Newtonsoft.Json;
+global using Storage.Api.Models;
+global using Storage.Infrastructure.Exceptions;

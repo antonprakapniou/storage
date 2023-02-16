@@ -6,17 +6,17 @@ public sealed class BookService : ApiService<Book, BookDto>
     private readonly IApiRepository<Author> _authorRep;
     private readonly IApiRepository<Topic> _topicRep;
     private readonly IMapper _mapper;
-    private readonly ILogger<ApiService<Book, BookDto>> _logger;
+    private readonly ILogger<BookService> _logger;
     private readonly string _modelType;
 
     public BookService(
         IApiRepository<Book> bookRep,
         IApiRepository<Author> authorRep,
         IApiRepository<Topic> topicRep,
-
         IMapper mapper,
-        ILogger<ApiService<Book, BookDto>> logger) 
-        : base(bookRep, mapper, logger)
+        ILogger<BookService> logger,
+        IValidator<BookDto> validator) 
+        : base(bookRep, mapper, logger,validator)
     {
         _bookRep= bookRep;
         _authorRep= authorRep;
@@ -31,8 +31,8 @@ public sealed class BookService : ApiService<Book, BookDto>
         var models = await _bookRep.GetAllByAsync()
             ?? throw new ModelNotFoundException($"'{_modelType}' collection not found");
 
-        _logger.LogInformation($"'{_modelType}' collection loaded successfully");
-        var dtos = _mapper.Map<IEnumerable<BookDto>>(models);
+        _logger.LogInformation("'{ModelType}' collection loaded successfully", _modelType);
+        var dtos = _mapper.Map<IEnumerable<BookDto>>(models).OrderBy(_=>_.Topic!.Name).ThenBy(_=>_.Name).ThenBy(_=>_.Author!.Name);
         foreach (var dto in dtos) await SetPropAsync(dto);
         return dtos;
     }
@@ -41,7 +41,7 @@ public sealed class BookService : ApiService<Book, BookDto>
         var model = await _bookRep.GetOneByAsync(_ => _.Id.Equals(id))
             ??throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
-        _logger.LogInformation($"'{_modelType}' with Id '{id}' loaded successfully");
+        _logger.LogInformation("'{ModelType}' with Id '{ModelId}' loaded successfully", _modelType, id);
         var dto = _mapper.Map<BookDto>(model);
         await SetPropAsync(dto);
         return dto;

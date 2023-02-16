@@ -11,11 +11,13 @@ public sealed class BookModelConfig : IEntityTypeConfiguration<Book>
 
         builder
             .HasOne(_ => _.Author)
-            .WithMany(_ => _.Books);
+            .WithMany(_ => _.Books)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .HasOne(_ => _.Topic)
-            .WithMany(_ => _.Books);
+            .WithMany(_ => _.Books)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .Property(_ => _.Id)

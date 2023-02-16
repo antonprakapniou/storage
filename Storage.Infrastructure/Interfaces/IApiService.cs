@@ -6,7 +6,7 @@ public interface IApiService<T,D>
 {
     public Task<IEnumerable<D>> GetAsync();
     public Task<D> GetByIdAsync(Guid id);
-    public Task CreateAsync(D dto);
-    public Task UpdateAsync(D dto);
-    public Task DeleteAsync(Guid id);
+    public Task<D> CreateAsync(D dto);
+    public Task<D> UpdateAsync(D dto);
+    public Task<bool> DeleteAsync(Guid id);
 }
