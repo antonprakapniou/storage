@@ -45,57 +45,47 @@ public class ApiService<T,D>:IApiService<T,D>
     {
         var validationResult = await _validator.ValidateAsync(dto);
 
-        if (validationResult.IsValid)
-        {
-            var model = _mapper.Map<T>(dto);
-            var modelResult = await _rep.CreateAsync(model);            
-            var dtoResult = _mapper.Map<D>(modelResult);
-            _logger.LogInformation("'{ModelType}' created successfully", _modelType);
-            return dtoResult;
-        }
-
-        else
-        {
-            _logger.LogError("Invalid value for '{ModelType}'", _modelType);
+        if (!validationResult.IsValid) 
             throw new InvalidValueException($"Invalid value for '{_modelType}'");
-        }
-        
+
+        var model = _mapper.Map<T>(dto);
+        var modelResult = await _rep.CreateAsync(model);
+        var dtoResult = _mapper.Map<D>(modelResult);
+        _logger.LogInformation("'{ModelType}' created successfully", _modelType);
+        return dtoResult;
     }
-    public async Task<D> UpdateAsync(D dto)
+    public async Task<D> UpdateAsync(Guid id,D dto)
     {
+        if (!dto.Id.Equals(id))
+            throw new InvalidUpdatingException($"'{_modelType}' Id '{dto.Id}' does not match Id '{id}' from request");
+
+        if (!await _rep.IsExists(_=>_.Id.Equals(id)))
+            throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
+
         var validationResult = await _validator.ValidateAsync(dto);
 
-        if (validationResult.IsValid)
-        {
-            var model = _mapper.Map<T>(dto);
-            var modelResult=await _rep.UpdateAsync(model);
-            var dtoResult = _mapper.Map<D>(modelResult);
-            _logger.LogInformation("'{ModelType}' modified successfully", _modelType);
-            return dtoResult;
-        }
-
-        else
-        {
-            _logger.LogError("Invalid value for '{ModelType}'", _modelType);
+        if (!validationResult.IsValid) 
             throw new InvalidValueException($"Invalid value for '{_modelType}'");
-        }
+
+        var model = _mapper.Map<T>(dto);
+        var modelResult = await _rep.UpdateAsync(model);
+        var dtoResult = _mapper.Map<D>(modelResult);
+        _logger.LogInformation("'{ModelType}' modified successfully", _modelType);
+        return dtoResult;
     }
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var model = await _rep.GetOneByAsync(_ => _.Id.Equals(id))
-            ??throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
+        Expression<Func<T, bool>> expression = _ => _.Id.Equals(id);
 
-         var result= await _rep.DeleteAsync(model);
-        if (result)
-        {
-            _logger.LogInformation("'{ModelType}' with Id '{ModelId}' removed successfully", _modelType, id);
-            return result;
-        }
+        if (!await _rep.IsExists(expression))
+            throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
-        else
-        {
-            _logger.LogError("'{ModelType}' with Id '{Id}' not deleted", _modelType,id);
-            throw new InvalidRemovalException($"'{_modelType}' with Id '{id}' not deleted");
-        } 
+        var result= await _rep.DeleteByAsync(expression);
+
+        if (!result) 
+            throw new InvalidRemovinglException($"'{_modelType}' with Id '{id}' removing failed"); 
+        
+        _logger.LogInformation("'{ModelType}' with Id '{ModelId}' removed successfully", _modelType, id);
+        return result;
     }
 }

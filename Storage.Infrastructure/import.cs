@@ -7,3 +7,4 @@ global using Storage.Core.Interfaces;
 global using Storage.Infrastructure.Interfaces;
 global using Storage.Infrastructure.Exceptions;
 global using Microsoft.Extensions.Logging;
+global using System.Linq.Expressions;

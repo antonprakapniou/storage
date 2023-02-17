@@ -18,12 +18,12 @@ public class ExceptionHandlerMiddleware : IMiddleware
 
         catch (Exception exception)
         {
-            _logger.LogError(exception.Message);
+            _logger.LogError(message: exception.Message);
             await ExceptionHandleAsync(context, exception);
         }
     }
 
-    private static Task ExceptionHandleAsync(HttpContext context,Exception exception)
+    private static Task ExceptionHandleAsync(HttpContext context, Exception exception)
     {
         ErrorDetails details = new();
         var response = context.Response;
@@ -31,31 +31,29 @@ public class ExceptionHandlerMiddleware : IMiddleware
 
         switch (exception)
         {
-            case InvalidValueException ex:
+            case InvalidValueException:
                 response.StatusCode=(int)HttpStatusCode.UnprocessableEntity;
-                details.Message=ex.Message;
-                details.StackTrace=ex.StackTrace!;
                 break;
 
-            case ModelNotFoundException ex:
+            case ModelNotFoundException:
                 response.StatusCode=(int)HttpStatusCode.NotFound;
-                details.Message=ex.Message;
-                details.StackTrace=ex.StackTrace!;
                 break;
 
-            case InvalidRemovalException ex:
+            case InvalidUpdatingException:
                 response.StatusCode=(int)HttpStatusCode.Forbidden;
-                details.Message=ex.Message;
-                details.StackTrace=ex.StackTrace!;
+                break;
+
+            case InvalidRemovinglException:
+                response.StatusCode=(int)HttpStatusCode.Forbidden;
                 break;
 
             default:
                 response.StatusCode=(int)HttpStatusCode.InternalServerError;
-                details.Message=exception.Message;
-                details.StackTrace=exception.StackTrace!;
                 break;
         }
 
+        details.Message = exception.Message;
+        details.StackTrace=exception.StackTrace!;
         return response.WriteAsync(details.ToString());
     }
 }
