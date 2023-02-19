@@ -21,3 +21,5 @@ global using Storage.Api.Models;
 global using Storage.Infrastructure.Exceptions;
 global using Microsoft.Extensions.Configuration;
 global using Storage.Infrastructure.Configuration;
+global using Microsoft.OpenApi.Models;
+global using System.Reflection;

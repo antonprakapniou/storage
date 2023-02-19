@@ -2,6 +2,7 @@
 
 [Route("author")]
 [ApiController]
+[Produces("application/json")]
 public class AuthorController : ControllerBase
 {
     private readonly IApiService<Author, AuthorDto> _service;

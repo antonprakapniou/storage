@@ -29,24 +29,13 @@ public class ExceptionHandlerMiddleware : IMiddleware
         var response = context.Response;
         response.ContentType= "application/json";
 
-        switch (exception)
+        response.StatusCode=exception switch
         {
-            case InvalidValueException:
-                response.StatusCode=(int)HttpStatusCode.UnprocessableEntity;
-                break;
-
-            case ModelNotFoundException:
-                response.StatusCode=(int)HttpStatusCode.NotFound;
-                break;
-
-            case InvalidOperationException:
-                response.StatusCode=(int)HttpStatusCode.Forbidden;
-                break;
-
-            default:
-                response.StatusCode=(int)HttpStatusCode.InternalServerError;
-                break;
-        }
+            InvalidValueException => (int)HttpStatusCode.UnprocessableEntity,
+            ModelNotFoundException => (int)HttpStatusCode.NotFound,
+            InvalidOperationException => (int)HttpStatusCode.Forbidden,
+            _ => (int)HttpStatusCode.InternalServerError,
+        };
 
         details.Message = exception.Message;
         details.StackTrace=exception.StackTrace!;
