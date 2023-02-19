@@ -49,15 +49,17 @@ public class ApiService<T,D>:IApiService<T,D>
             throw new InvalidValueException($"Invalid value for '{_modelType}'");
 
         var model = _mapper.Map<T>(dto);
-        var modelResult = await _rep.CreateAsync(model);
+        var modelResult = await _rep.CreateAsync(model)
+            ?? throw new InvalidOperationException($"'{_modelType}' creating failed");
+
+        _logger.LogInformation("'{ModelType}' with Id '{ModelId}' created successfully", _modelType,modelResult!.Id);
         var dtoResult = _mapper.Map<D>(modelResult);
-        _logger.LogInformation("'{ModelType}' created successfully", _modelType);
         return dtoResult;
     }
     public async Task<D> UpdateAsync(Guid id,D dto)
     {
         if (!dto.Id.Equals(id))
-            throw new InvalidUpdatingException($"'{_modelType}' Id '{dto.Id}' does not match Id '{id}' from request");
+            throw new InvalidOperationException($"'{_modelType}' Id '{dto.Id}' does not match Id '{id}' from request");
 
         if (!await _rep.IsExists(_=>_.Id.Equals(id)))
             throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
@@ -68,7 +70,9 @@ public class ApiService<T,D>:IApiService<T,D>
             throw new InvalidValueException($"Invalid value for '{_modelType}'");
 
         var model = _mapper.Map<T>(dto);
-        var modelResult = await _rep.UpdateAsync(model);
+        var modelResult = await _rep.UpdateAsync(model)
+            ?? throw new InvalidOperationException($"'{_modelType}' updating failed");
+
         var dtoResult = _mapper.Map<D>(modelResult);
         _logger.LogInformation("'{ModelType}' modified successfully", _modelType);
         return dtoResult;
@@ -82,9 +86,8 @@ public class ApiService<T,D>:IApiService<T,D>
 
         var result= await _rep.DeleteByAsync(expression);
 
-        if (!result) 
-            throw new InvalidRemovinglException($"'{_modelType}' with Id '{id}' removing failed"); 
-        
+        if (!result) throw new InvalidOperationException($"'{_modelType}' with Id '{id}' removing failed");
+
         _logger.LogInformation("'{ModelType}' with Id '{ModelId}' removed successfully", _modelType, id);
         return result;
     }

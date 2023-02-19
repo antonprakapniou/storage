@@ -49,7 +49,7 @@ public class AuthorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<ActionResult> Delete(Guid id)
     {
-        var result = await _service.DeleteAsync(id);
-        return AcceptedAtAction(nameof(Get), result);
+        await _service.DeleteAsync(id);
+        return Ok();
     }
 }

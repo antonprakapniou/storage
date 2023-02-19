@@ -39,11 +39,7 @@ public class ExceptionHandlerMiddleware : IMiddleware
                 response.StatusCode=(int)HttpStatusCode.NotFound;
                 break;
 
-            case InvalidUpdatingException:
-                response.StatusCode=(int)HttpStatusCode.Forbidden;
-                break;
-
-            case InvalidRemovinglException:
+            case InvalidOperationException:
                 response.StatusCode=(int)HttpStatusCode.Forbidden;
                 break;
 
