@@ -46,10 +46,10 @@ public class AuthorController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
-        return Ok();
+        return NoContent();
     }
 }

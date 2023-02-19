@@ -7,3 +7,6 @@ global using Microsoft.EntityFrameworkCore.Migrations;
 global using System.Linq.Expressions;
 global using Storage.Core.EF;
 global using Storage.Core.Interfaces;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Storage.Core.Repositories;

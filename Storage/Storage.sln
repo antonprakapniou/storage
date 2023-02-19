@@ -5,9 +5,9 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage.Api", "Storage.Api.csproj", "{D4EC8775-1548-450C-B3D3-6EA443EB6240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Core", "..\Storage.Core\Storage.Core.csproj", "{550994CC-83CC-4A33-8F51-F9A0A4AA137E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage.Core", "..\Storage.Core\Storage.Core.csproj", "{550994CC-83CC-4A33-8F51-F9A0A4AA137E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Infrastructure", "..\Storage.Infrastructure\Storage.Infrastructure.csproj", "{AD649679-6686-417B-8394-9F32A0632E55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage.Infrastructure", "..\Storage.Infrastructure\Storage.Infrastructure.csproj", "{AD649679-6686-417B-8394-9F32A0632E55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

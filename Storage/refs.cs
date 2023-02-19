@@ -19,3 +19,5 @@ global using Microsoft.AspNetCore.Mvc;
 global using Newtonsoft.Json;
 global using Storage.Api.Models;
 global using Storage.Infrastructure.Exceptions;
+global using Microsoft.Extensions.Configuration;
+global using Storage.Infrastructure.Configuration;
