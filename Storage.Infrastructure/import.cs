@@ -13,3 +13,5 @@ global using Storage.Core.Repositories;
 global using Storage.Infrastructure.Services;
 global using Storage.Infrastructure.Utilities;
 global using Storage.Infrastructure.Validation;
+global using Swashbuckle.AspNetCore.Annotations;
+

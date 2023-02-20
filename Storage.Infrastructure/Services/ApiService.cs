@@ -25,18 +25,18 @@ public class ApiService<T,D>:IApiService<T,D>
 
     public virtual async Task<IEnumerable<D>> GetAsync()
     {
-        var models = await _rep.GetAllByAsync()
-            ?? throw new ModelNotFoundException($"'{_modelType}' collection not found");
+        if (!await _rep.IsContains()) throw new ModelNotFoundException($"'{_modelType}' collection not found");
 
+        var models = await _rep.GetAllByAsync();
         _logger.LogInformation("'{ModelType}' collection loaded successfully",_modelType);
         var dtos = _mapper.Map<IEnumerable<D>>(models);
         return dtos;
     }
     public virtual async Task<D> GetByIdAsync(Guid id)
     {
-        var model = await _rep.GetOneByAsync(_=>_.Id.Equals(id))
-            ??throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
+        if (!await _rep.IsContains(_=>_.Id.Equals(id))) throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
+        var model = await _rep.GetOneByAsync(_ => _.Id.Equals(id));
         _logger.LogInformation("'{ModelType}' with Id '{ModelId}' loaded successfully",_modelType,id);
         var dto =_mapper.Map<D>(model);
         return dto;
@@ -61,7 +61,7 @@ public class ApiService<T,D>:IApiService<T,D>
         if (!dto.Id.Equals(id))
             throw new InvalidOperationException($"'{_modelType}' Id '{dto.Id}' does not match Id '{id}' from request");
 
-        if (!await _rep.IsExists(_=>_.Id.Equals(id)))
+        if (!await _rep.IsContains(_=>_.Id.Equals(id)))
             throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
         var validationResult = await _validator.ValidateAsync(dto);
@@ -81,7 +81,7 @@ public class ApiService<T,D>:IApiService<T,D>
     {
         Expression<Func<T, bool>> expression = _ => _.Id.Equals(id);
 
-        if (!await _rep.IsExists(expression))
+        if (!await _rep.IsContains(expression))
             throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
         var result= await _rep.DeleteByAsync(expression);

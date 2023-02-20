@@ -7,6 +7,6 @@ public interface IApiRepository<T> where T : BaseModel
     public Task <T> CreateAsync(T model);
     public Task <T> UpdateAsync(T model);
     public Task <bool> DeleteByAsync(Expression<Func<T, bool>> expression);
-    public Task<bool> IsExists(Expression<Func<T, bool>> expression);
+    public Task<bool> IsContains(Expression<Func<T, bool>>? expression = null);
     public string GetModelType();
 }

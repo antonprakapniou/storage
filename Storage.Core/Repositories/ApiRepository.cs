@@ -20,7 +20,12 @@ public sealed class ApiRepository<T>:IApiRepository<T> where T : BaseModel
     public async Task<T> GetOneByAsync(Expression<Func<T, bool>> expression)
     {
         IQueryable<T> query = _t;
-        return await query.FirstAsync(expression);
+
+#pragma warning disable CS8603 // Possible null reference return.
+
+        return await query.FirstOrDefaultAsync(expression);
+
+#pragma warning restore CS8603 // Possible null reference return.
     }
     public async Task<T> CreateAsync(T model)
     {
@@ -41,6 +46,6 @@ public sealed class ApiRepository<T>:IApiRepository<T> where T : BaseModel
         await _db.SaveChangesAsync();
         return result;
     }
-    public async Task<bool> IsExists(Expression<Func<T, bool>> expression) => await _t.AnyAsync(expression);
+    public async Task<bool> IsContains(Expression<Func<T, bool>>? expression = null) => (expression == null) ? await _t.AnyAsync():await _t.AnyAsync(expression);
     public string GetModelType()=> typeof(T).Name;
 }

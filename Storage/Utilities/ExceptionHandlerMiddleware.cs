@@ -33,7 +33,7 @@ public class ExceptionHandlerMiddleware : IMiddleware
         {
             InvalidValueException => (int)HttpStatusCode.UnprocessableEntity,
             ModelNotFoundException => (int)HttpStatusCode.NotFound,
-            InvalidOperationException => (int)HttpStatusCode.Forbidden,
+            InvalidOperationException => (int)HttpStatusCode.BadRequest,
             _ => (int)HttpStatusCode.InternalServerError,
         };
 

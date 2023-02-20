@@ -22,9 +22,7 @@ public sealed class AuthorService : ApiService<Author, AuthorDto>
 
     public override async Task<IEnumerable<AuthorDto>> GetAsync()
     {
-        var models = await _rep.GetAllByAsync()
-            ?? throw new ModelNotFoundException($"'{_modelType}' collection not found");
-
+        var models = await _rep.GetAllByAsync() ?? throw new ModelNotFoundException($"'{_modelType}' collection not found");
         _logger.LogInformation("'{ModelType}' collection loaded successfully", _modelType);
         var dtos = _mapper.Map<IEnumerable<AuthorDto>>(models).OrderBy(_ => _.Name);
         return dtos;

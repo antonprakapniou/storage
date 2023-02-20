@@ -38,9 +38,9 @@ public sealed class BookService : ApiService<Book, BookDto>
     }
     public override async Task<BookDto> GetByIdAsync(Guid id)
     {
-        var model = await _bookRep.GetOneByAsync(_ => _.Id.Equals(id))
-            ??throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
+        if (!await _bookRep.IsContains(_=>_.Id.Equals(id))) throw new ModelNotFoundException($"'{_modelType}' with Id '{id}' not found");
 
+        var model = await _bookRep.GetOneByAsync(_ => _.Id.Equals(id));
         _logger.LogInformation("'{ModelType}' with Id '{ModelId}' loaded successfully", _modelType, id);
         var dto = _mapper.Map<BookDto>(model);
         await SetPropAsync(dto);

@@ -23,3 +23,4 @@ global using Microsoft.Extensions.Configuration;
 global using Storage.Infrastructure.Configuration;
 global using Microsoft.OpenApi.Models;
 global using System.Reflection;
+global using Swashbuckle.AspNetCore.Annotations;
